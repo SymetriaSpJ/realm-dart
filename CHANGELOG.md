@@ -1,3 +1,17 @@
+## vNext (TBD)
+
+### Enhancements
+* Upgrade min Dart SDK to 3.7.0, update all dependencies to latest stable version.
+
+### Fixed
+* None
+
+### Compatibility
+* Realm Studio: 15.0.0 or later.
+
+### Internal
+* Using Core x.y.z.
+
 ## 20.2.0 (2025-09-24)
 
 ### Enhancements
