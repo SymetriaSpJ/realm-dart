@@ -13,7 +13,8 @@ environment:
 
 dependencies:
   analyzer: ^7.3.0
-  ejson_annotation: ^0.4.1
+  ejson_annotation:
+    path: ../ejson_annotation
   source_gen: ^2.0.0
 
 dev_dependencies:

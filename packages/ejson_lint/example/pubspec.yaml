@@ -8,9 +8,11 @@ environment:
   sdk: ^3.6.0
 
 dependencies:
-  ejson_annotation: ^0.4.1
+  ejson_annotation:
+    path: ../../ejson_annotation
 
 dev_dependencies:
   custom_lint: ^0.7.1
-  ejson_lint: ^0.4.1
+  ejson_lint:
+    path: ../
   lints: ^5.1.1
