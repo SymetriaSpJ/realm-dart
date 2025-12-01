@@ -20,7 +20,8 @@ environment:
 
 dependencies:
   collection: ^1.19.0
-  ejson_annotation: ^0.4.1
+  ejson_annotation:
+    path: ../ejson_annotation
   objectid: ^4.0.0
   sane_uuid: ^1.0.0
   type_plus: ^2.0.0
