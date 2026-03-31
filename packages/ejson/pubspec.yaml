@@ -20,13 +20,15 @@ environment:
 
 dependencies:
   collection: ^1.19.0
-  ejson_annotation: ^0.4.1
+  ejson_annotation:
+    path: ../ejson_annotation
   objectid: ^4.0.0
   sane_uuid: ^1.0.0
   type_plus: ^2.0.0
 
 dev_dependencies:
   build_runner: ^2.4.14
-  ejson_generator: ^0.4.1
+  ejson_generator:
+    path: ../ejson_generator
   lints: ^5.1.1
   test: ^1.25.9
