@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:realm_generator/realm_generator.dart';
 import 'package:test/test.dart';
 import 'package:term_glyph/term_glyph.dart';
 import 'test_util.dart';
@@ -15,8 +14,8 @@ void main() async {
       'compile $sourceFile',
       sourceFile,
       throwsA(
-        isA<RealmInvalidGenerationSourceError>().having(
-          (e) => e.format().trim().normalizeLineEndings(),
+        isA<String>().having(
+          (e) => e.trim().normalizeLineEndings(),
           'format',
           (await errorFile.readAsString()).trim().normalizeLineEndings(),
         ),

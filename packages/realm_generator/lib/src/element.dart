@@ -18,8 +18,8 @@ import 'session.dart';
 import 'type_checkers.dart';
 import 'utils.dart';
 
-ElementDeclarationResult? getDeclarationFromElement(Element element) {
-  return session.resolvedLibrary.getElementDeclaration(element);
+FragmentDeclarationResult? getDeclarationFromElement(Element element) {
+  return session.resolvedLibrary.getFragmentDeclaration(element.firstFragment);
 }
 
 extension on FileSpan {
@@ -43,9 +43,28 @@ extension AstNodeEx on AstNode {
 }
 
 extension ElementEx on Element {
+  /// Whether this element was not written explicitly in the source, e.g. a default
+  /// constructor or a getter/setter induced by a field declaration.
+  bool get isSynthetic => nonSynthetic != this;
+
   FileSpan? get _shortSpan {
     try {
       return spanForElement(this) as FileSpan;
+    } catch (_) {}
+    // spanForElement relies on Fragment.nameOffset, which is null for constructors
+    // written without an explicit `.new` (the common case). Fall back to
+    // Fragment.offset, which is always set, covering that gap. For such
+    // constructors offset points at the class name, not the (synthetic 'new')
+    // fragment name, so measure against the enclosing class name instead.
+    try {
+      final self = this;
+      final fragment = firstFragment;
+      final source = fragment.libraryFragment?.source;
+      final contents = source?.contents.data;
+      final name = self is ConstructorElement ? self.enclosingElement.name : fragment.name;
+      if (name == null || source == null || contents == null) return null;
+      final file = SourceFile.fromString(contents, url: source.uri);
+      return file.span(fragment.offset, fragment.offset + name.length);
     } catch (_) {}
     return null;
   }

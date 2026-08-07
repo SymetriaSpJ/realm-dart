@@ -43,17 +43,18 @@ void testCompile(
 
   test(description, () async {
     generate() async {
-      final writer = InMemoryAssetWriter();
-      await testBuilder(
+      final readerWriter = TestReaderWriter();
+      await readerWriter.testing.loadIsolateSources();
+      final result = await testBuilder(
         generateRealmObjects(),
         {'pkg|$assetName': '$source'},
-        writer: writer,
-        reader: await PackageAssetReader.currentIsolate(),
+        readerWriter: readerWriter,
         onLog: onLog,
+        flattenOutput: true,
+        verbose: true,
       );
-      return _formatter.format(
-        String.fromCharCodes(writer.assets.entries.single.value),
-      );
+      if (!result.succeeded) throw result.errors.single;
+      return _formatter.format(readerWriter.testing.readString(result.outputs.single));
     }
 
     expect(generate(), matcher);
@@ -90,8 +91,9 @@ void testCompileMany(
 
   test(description, () {
     generate() async {
-      final writer = InMemoryAssetWriter();
-      await testBuilder(
+      final readerWriter = TestReaderWriter();
+      await readerWriter.testing.loadIsolateSources();
+      final result = await testBuilder(
         generateRealmObjects(),
         Map<String, Object>.fromEntries(
           inputs.map((x) {
@@ -99,12 +101,11 @@ void testCompileMany(
             return MapEntry(id, source);
           }),
         ),
-        writer: writer,
-        reader: await PackageAssetReader.currentIsolate(),
+        readerWriter: readerWriter,
+        flattenOutput: true,
       );
-      return writer.assets.values.map(
-        (charCodes) => String.fromCharCodes(charCodes),
-      );
+      if (!result.succeeded) throw result.errors.single;
+      return result.outputs.map(readerWriter.testing.readString);
     }
 
     expect(generate(), matcher);
